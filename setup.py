@@ -1,6 +1,11 @@
 import sys
-from distutils.core import setup
-from distutils.extension import Extension
+
+if sys.version_info[0] < 3:         # Python 2.x
+    from setuptools import setup
+    from setuptools import Extension
+else:                               # Python 3.x
+    from distutils.core import setup
+    from distutils.extension import Extension
 from Cython.Build import cythonize
 
 import numpy
@@ -11,7 +16,6 @@ if sys.platform == "linux":
 elif sys.platform == "win32":
     dirs_include = ["C:/Program Files/MVTec/HALCON-13.0/include/halconcpp", "C:/Program Files/MVTec/HALCON-13.0/include", numpy.get_include(), "."]
     dirs_library = ["C:/Program Files/MVTec/HALCON-13.0/lib/x64-win64"]
-
 
 setup(
     name="python-hcn",

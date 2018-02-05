@@ -6,7 +6,6 @@ cimport hcn.cpp_hcn as cpp
 from cython.view cimport array as cvarray
 from cython import NULL
 
-
 from enum import Enum
 
 MATH3D = True
@@ -428,12 +427,14 @@ cdef class Model3D:
         m.me = self.me.SmoothObjectModel3d(b"mls", _list2tuple(names), _list2tuple(vals))
         return m
 
-    def create_surface_model(self, double dist, invert_normals="false"):
+    def create_surface_model(self, double dist, invert_normals="false", train_edges="false"):
         s = Surface()
         names = []
         vals = []
         names.append(b"model_invert_normals")
+        names.append(b"train_3d_edges")
         vals.append(invert_normals)
+        vals.append(train_edges)
         s.me = self.me.CreateSurfaceModel(dist, _list2tuple(names), _list2tuple(vals))
         return s
 
@@ -594,7 +595,17 @@ cdef class Model3D:
         """
         cdef cpp.HObjectModel3DArray results = self.me.ConnectionObjectModel3d(feature.encode(), value) 
         return _model_array_to_model_list(results)
-
+ 
+    def triangulate(self, method):
+        """
+        Method (string): 'polygon_triangulation', 'greedy' or 'implicit'
+        """
+        m = Model3D()
+        names = []
+        vals = []
+        cdef long* info
+        m.me = self.me.TriangulateObjectModel3d(method.encode(), _list2tuple(names), _list2tuple(vals), info)
+        return m
 
 cdef class Plane(Model3D):
     def __init__(self, HPose pose, xext_vect, yext_vect):

@@ -117,6 +117,7 @@ cdef extern from "HSurfaceModel.h" namespace "HalconCpp":
 
         HPoseArray FindSurfaceModel(const HObjectModel3D&, double RelSamplingDistance, double KeyPointFraction, const HTuple& MinScore, const HString& ReturnResultHandle, const HTuple& GenParamName, const HTuple& GenParamValue, HTuple* Score, HSurfaceMatchingResultArray*)  except +raise_py_error
         HPose RefineSurfaceModelPose(const HObjectModel3D& ObjectModel3D, const HPose& InitialPose, double MinScore, const HString& ReturnResultHandle, const HTuple& GenParamName, const HTuple& GenParamValue, HTuple* Score, HSurfaceMatchingResult* SurfaceMatchingResultID) const;
+        void WriteSurfaceModel(const char* FileName) const;
 
 
 cdef extern from "HObjectModel3D.h" namespace "HalconCpp":

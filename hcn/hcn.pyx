@@ -310,6 +310,12 @@ cdef class Surface:
     def __cinit__(self):
         self.me = cpp.HSurfaceModel()
 
+    @staticmethod
+    def from_file(path):
+        surf = Surface()
+        surf.me = cpp.HSurfaceModel(path.encode())
+        return surf
+
     def find_surface_model(self, Model3D model, double rel_sample_dist=0.05, double key_point_fraction=0.2, double min_score=0.5, params=None):
         """
         Find our surface in a scene. Read Halcon documentation for more
@@ -336,7 +342,9 @@ cdef class Surface:
         score = HTuple()
         new_pose.me = self.me.RefineSurfaceModelPose(model.me, pose.me, min_score, cpp.HString("false"),  _list2tuple(names), _list2tuple(vals), &score.me, &sres)
         return new_pose, score.to_list()
-   
+
+    def to_file(self, path):
+        self.me.WriteSurfaceModel(path.encode())               
 
 cdef class Model3D:
 

@@ -343,6 +343,11 @@ cdef class Surface:
         new_pose.me = self.me.RefineSurfaceModelPose(model.me, pose.me, min_score, cpp.HString("false"),  _list2tuple(names), _list2tuple(vals), &score.me, &sres)
         return new_pose, score.to_list()
 
+    def set_cam_params(self, str path):
+        cdef cpp.HCamPar cp
+        cp.ReadCamPar(cpp.HString(path.encode()))
+        self.me.SetSurfaceModelParam(cpp.HString(b"camera_parameter"), cpp.HTuple(cp))
+
     def to_file(self, path):
         self.me.WriteSurfaceModel(path.encode())               
 
@@ -709,8 +714,6 @@ cdef class Image:
         im = Image()
         im.me = self.me.InspectShapeModel(&reg.me, level, contrast)
         return im, reg
-
-
 
 
 
